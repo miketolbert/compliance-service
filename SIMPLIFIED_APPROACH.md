@@ -67,5 +67,4 @@ graph TD
 - Integrate more advanced observability solutions like Datadog as the product and budget allow.
 
 ### Conclusion
-
 By starting with a monolithic architecture that is modular, we can quickly develop and deploy the compliance service, and iteratively improve the product. This approach balances the need for speed and cost-efficiency with the ability to scale and adapt the architecture as we grow.

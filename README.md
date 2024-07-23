@@ -3,13 +3,15 @@
 ## At a high level how would you build the compliance service to enable this level of runtime configuration?
 
 Please see the following approaches:
-1. Simplified Approach (Monolith)
-2. Advanced Approach (Microservices)
+1. [Simplified Approach (Monolith)](https://github.com/miketolbert/compliance-service/blob/main/SIMPLIFIED_APPROACH.md)
+2. [Advanced Approach (Microservices)](https://github.com/miketolbert/compliance-service/blob/main/ADVANCED_APPROACH.md)
 
 
 ## What considerations would you make from a project management perspective?
 
-Please see the sections titled "Project Management" for details in the 2 approaches linked above.
+Please see the sections titled "Project Management" for details in the 2 approaches.
+- [Simplified Approach](https://github.com/miketolbert/compliance-service/blob/main/SIMPLIFIED_APPROACH.md#3-project-management)
+- [Advanced Approach](https://github.com/miketolbert/compliance-service/blob/main/ADVANCED_APPROACH.md#3-project-management)
 
 
 ## How would you ensure success and timely delivery of this project?
