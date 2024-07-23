@@ -1,18 +1,18 @@
-# Compliance Service Expectations and Questions
+# Compliance Service - Expectations and Questions
 
-### At a high level how would you build the compliance service to enable this level of runtime configuration?
+## At a high level how would you build the compliance service to enable this level of runtime configuration?
 
 Please see the following approaches:
 1. Simplified Approach (Monolith)
 2. Advanced Approach (Microservices)
 
 
-### What considerations would you make from a project management perspective?
+## What considerations would you make from a project management perspective?
 
 Please see the sections titled "Project Management" for details in the 2 approaches linked above.
 
 
-### How would you ensure success and timely delivery of this project?
+## How would you ensure success and timely delivery of this project?
 
 **1. Choosing the Appropriate Approach:**
    - **Timeline Consideration:** Depending on the project timeline and resource availability, we will decide whether to start with a simplified monolithic approach or directly implement a more advanced microservices architecture.
