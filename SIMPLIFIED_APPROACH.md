@@ -9,7 +9,7 @@ This is a new compliance service to modularize the existing code base. Each US s
 ```mermaid
 graph TD
     A[User] -->|API Request| B[API Gateway]
-    B --> C[Monolithic Application]
+    B --> C[Compliance Service - Monolithic Application]
 
     subgraph Observability
         E[Basic Logging]
@@ -23,7 +23,7 @@ graph TD
 ```mermaid
 graph TD
 
-    subgraph Monolithic Application
+    subgraph Compliance Service - Monolithic Application
         C1[Compliance Module]
         C2[Configuration Management Module]
         C3[Schema Transformation Module]
@@ -38,7 +38,6 @@ graph TD
 - **Monolithic Core with Modular Components**:
   - Develop a monolithic application initially, with clearly defined modules for Compliance Service, Configuration Management, and Schema Transformation. This can be later refactored into microservices as the need arises.
 - **Tech Stack**:
-  - Use TypeScript, HTML5, CSS3 for the front-end with Vite for development.
   - Use Node.js for the back-end with PostgreSQL for data storage.
   - Deploy on a cloud platform like AWS, using cost-effective services (e.g., AWS RDS for PostgreSQL).
 
