@@ -71,6 +71,8 @@ To build the compliance service that allows runtime configuration for different 
 - **Phase 5**: Migration and Monitoring
   - Migrate existing compliance logic from the monolith to the new service.
   - Implement monitoring and logging for all services.
+- **Phase 6**: Incremental Improvements
+  - Gather user feedback and iterate on the product.
 
 #### 4. Cost-Effective Monitoring and Logging
 - Ensure all services are properly monitored and logs are collected for auditing purposes.
