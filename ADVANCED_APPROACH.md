@@ -10,32 +10,30 @@ This is a new compliance service to modularize the existing code base. Each US s
 graph TD
     A[User] -->|API Request| B[API Gateway]
     B --> C[Compliance Service]
-    C --> D[Configuration Management Service]
-    C --> E[Schema Transformation Service]
-    C --> F[Rule Engine]
 
-    subgraph Configuration Management
-        D1[Store Compliance Rules]
-        D2[Retrieve Compliance Rules]
-        D --> D1
-        D --> D2
+    subgraph Microservices
+        C --> D[Configuration Management Service]
+        C --> E[Schema Transformation Service]
+        C --> F[Rules Engine Service]
     end
 
-    subgraph Schema Transformation
-        E1[Fetch Transformation Rules]
-        E2[Apply Transformation]
-        E --> E1
-        E --> E2
+    D --> G[PostgreSQL Database]
+    E --> G
+    F --> G
+
+    subgraph Observability
+        H[Centralized Logging]
+        I[Basic Monitoring]
     end
 
-    subgraph Rule Engine
-        F1[Evaluate Rules]
-        F2[Apply Compliance Logic]
-        F --> F1
-        F --> F2
-    end
-
-    C --> G[Monitoring and Logging]
+    C --> H
+    C --> I
+    D --> H
+    D --> I
+    E --> H
+    E --> I
+    F --> H
+    F --> I
 ```
 
 #### 1. Architecture Overview
