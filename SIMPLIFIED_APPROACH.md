@@ -8,30 +8,37 @@ This is a new compliance service to modularize the existing code base. Each US s
 
 ```mermaid
 graph TD
-    A[Client] -->|API Request| B[API Gateway]
-    B --> C[Compliance Service - Monolithic Application]
+    Client -->|Submit Request| APIGateway
+    APIGateway -->|Forward Request| ComplianceModule
 
+    subgraph A[Compliance Service - Monolithic Application]
+        ComplianceModule
+        ConfigManagementModule
+        SchemaTransformModule
+        RulesEngineModule
+        ConfigDB
+        ComplianceDB
+    end
+
+    ComplianceModule -->|Get Config| ConfigManagementModule
+    ConfigManagementModule -->|Fetch Rules and Schemas| ConfigDB[(Config DB)]
+    ConfigDB --> ConfigManagementModule
+    ConfigManagementModule --> ComplianceModule
+
+    ComplianceModule -->|Transform Data| SchemaTransformModule
+    SchemaTransformModule --> ComplianceModule
+
+    ComplianceModule -->|Evaluate Rules| RulesEngineModule
+    RulesEngineModule --> ComplianceModule
+
+    ComplianceModule -->|Log Result| ComplianceDB[(Compliance DB)]
+ 
     subgraph Observability
-        E[Basic Logging]
-        F[Basic Monitoring]
+        L[Centralized Logging]
+        M[Basic Monitoring]
     end
 
-    C --> E
-    C --> F
-```
-
-```mermaid
-graph TD
-
-    subgraph Compliance Service - Monolithic Application
-        C1[Compliance Module]
-        C2[Configuration Management Module]
-        C3[Schema Transformation Module]
-        C4[Rule Engine Module]
-    end
-
-    C1 --> D[PostgreSQL Database]
-    C2 --> D
+    A ----- Observability
 ```
 
 ```mermaid
@@ -82,9 +89,9 @@ sequenceDiagram
 #### 2. Component Breakdown
 - **Compliance Module**:
   - Centralize compliance logic in a single module within the monolithic application. This module handles all compliance-related checks and operations, ensuring adherence to state-specific regulations.
-- **Configuration Management**:
+- **Configuration Management Module**:
   - Store compliance rules and configurations in PostgreSQL.
-- **Schema Transformation**:
+- **Schema Transformation Module**:
   - Implement transformation logic within the same monolith, but structure it as a separate module.
 - **Rules Engine Module**:
   - Embed a rule engine within the monolithic application to evaluate compliance rules.

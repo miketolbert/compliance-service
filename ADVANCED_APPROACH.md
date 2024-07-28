@@ -8,31 +8,37 @@ This is a new compliance service to modularize the existing code base. Each US s
 
 ```mermaid
 graph TD
-    A[Client] -->|API Request| B[API Gateway]
-    B --> C[Compliance Service]
+    Client -->|Submit Request| APIGateway
+    APIGateway -->|Forward Request| ComplianceService
 
     subgraph Microservices
-        C --> D[Configuration Management Service]
-        C --> E[Schema Transformation Service]
-        C --> F[Rules Engine Service]
+        ComplianceService
+        ConfigManagementService
+        SchemaTransformService
+        RulesEngineService
+        ConfigDB
+        ComplianceDB
     end
 
-    D --> G[PostgreSQL Database]
-    C --> G
+    ComplianceService -->|Get Config| ConfigManagementService
+    ConfigManagementService -->|Fetch Rules and Schemas| ConfigDB[(Config DB)]
+    ConfigDB --> ConfigManagementService
+    ConfigManagementService --> ComplianceService
 
+    ComplianceService -->|Transform Data| SchemaTransformService
+    SchemaTransformService --> ComplianceService
+
+    ComplianceService -->|Evaluate Rules| RulesEngineService
+    RulesEngineService --> ComplianceService
+
+    ComplianceService -->|Log Result| ComplianceDB[(Compliance DB)]
+ 
     subgraph Observability
-        H[Centralized Logging]
-        I[Basic Monitoring]
+        L[Centralized Logging]
+        M[Basic Monitoring]
     end
 
-    C --> H
-    C --> I
-    D --> H
-    D --> I
-    E --> H
-    E --> I
-    F --> H
-    F --> I
+    Microservices ----- Observability
 ```
 
 ```mermaid
@@ -77,16 +83,16 @@ sequenceDiagram
 To build the compliance service that allows runtime configuration for different state regulations, we can leverage a microservices architecture. This architecture will modularize the existing monolith application, making it easier to inject different compliance logic at runtime. The core components of this system will include:
 
 1. **Compliance Service**: The main service responsible for handling compliance checks and transformations.
-2. **Configuration Management**: A service to manage and retrieve compliance rules and mappings for each state.
+2. **Configuration Management Service**: A service to manage and retrieve compliance rules and mappings for each state.
 3. **Schema Transformation Service**: A service that maps data schema to each state's schema.
-4. **Rule Engine**: A dynamic rule engine to evaluate compliance rules.
+4. **Rule Engine Service**: A dynamic rule engine to evaluate compliance rules.
 5. **API Gateway**: Routes requests to appropriate microservices and handles authentication and rate limiting.
 
 #### 2. Component Breakdown
 - **Compliance Service**: This service will act as the entry point for all compliance-related requests. It will validate and process requests based on the current state's compliance rules.
-- **Configuration Management**: A centralized service that stores all state-specific rules and schema mappings in a database (preferably NoSQL for flexibility). This service will be responsible for dynamically providing configurations to the Compliance Service.
+- **Configuration Management Service**: A centralized service that stores all state-specific rules and schema mappings in a database (preferably NoSQL for flexibility). This service will be responsible for dynamically providing configurations to the Compliance Service.
 - **Schema Transformation Service**: A service to handle the transformation of data schemas. It will use the configurations provided by the Configuration Management service to transform data according to the state's requirements.
-- **Rule Engine**: This component will evaluate rules based on the configurations.
+- **Rule Engine Service**: This component will evaluate rules based on the configurations.
 - **API Gateway**: Acts as a façade to the outside world, routing requests to the appropriate services and handling cross-cutting concerns like authentication, rate limiting, and logging.
 
 #### 3. Project Management
