@@ -21,7 +21,7 @@ graph TD
     end
 
     ComplianceModule -->|Get Config| ConfigManagementModule
-    ConfigManagementModule -->|Fetch Rules and Schemas| ConfigDB[(Config DB)]
+    ConfigManagementModule -->|Fetch Rules and Schemas| ConfigDB[(Rules\nSchemas)]
     ConfigDB --> ConfigManagementModule
     ConfigManagementModule --> ComplianceModule
 
@@ -31,7 +31,7 @@ graph TD
     ComplianceModule -->|Evaluate Rules| RulesEngineModule
     RulesEngineModule --> ComplianceModule
 
-    ComplianceModule -->|Log Result| ComplianceDB[(Compliance DB)]
+    ComplianceModule -->|Log Result| ComplianceDB[(Results)]
  
     subgraph Observability
         L[Centralized Logging]
