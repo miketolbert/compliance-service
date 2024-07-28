@@ -8,7 +8,7 @@ This is a new compliance service to modularize the existing code base. Each US s
 
 ```mermaid
 graph TD
-    A[User] -->|API Request| B[API Gateway]
+    A[Client] -->|API Request| B[API Gateway]
     B --> C[Compliance Service - Monolithic Application]
 
     subgraph Observability
@@ -32,8 +32,44 @@ graph TD
 
     C1 --> D[PostgreSQL Database]
     C2 --> D
-    C3 --> D
-    C4 --> D
+```
+
+```mermaid
+sequenceDiagram
+    participant Client
+    participant APIGateway
+    participant ComplianceService
+    participant ConfigManagementModule
+    participant SchemaTransform
+    participant RulesEngine
+    participant Database
+
+    Client->>APIGateway: Submit compliance check request
+    APIGateway->>ComplianceService: Forward request with transaction data
+
+    ComplianceService->>ConfigManagementModule: Retrieve state-specific compliance rules
+    ConfigManagementModule->>Database: Query compliance rules
+    Database->>ConfigManagementModule: Return compliance rules
+    ConfigManagementModule->>ComplianceService: Return compliance rules
+
+    ComplianceService->>ConfigManagementModule: Retrieve state-specific schema
+    ConfigManagementModule->>Database: Query state-specific schema
+    Database->>ConfigManagementModule: Return schema
+    ConfigManagementModule->>ComplianceService: Return schema
+
+    ComplianceService->>SchemaTransform: Transform transaction data based on state schema
+    SchemaTransform->>ComplianceService: Return transformed data
+
+    ComplianceService->>RulesEngine: Evaluate compliance rules on transformed data
+    RulesEngine->>ComplianceService: Return compliance check result
+
+    ComplianceService->>Database: Log compliance check result
+
+    alt Compliance Passed
+        ComplianceService->>Client: Return success response
+    else Compliance Failed
+        ComplianceService->>Client: Return failure response
+    end
 ```
 
 #### 1. Architecture Overview
