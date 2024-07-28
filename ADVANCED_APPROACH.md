@@ -8,7 +8,7 @@ This is a new compliance service to modularize the existing code base. Each US s
 
 ```mermaid
 graph TD
-    A[User] -->|API Request| B[API Gateway]
+    A[Client] -->|API Request| B[API Gateway]
     B --> C[Compliance Service]
 
     subgraph Microservices
@@ -18,8 +18,7 @@ graph TD
     end
 
     D --> G[PostgreSQL Database]
-    E --> G
-    F --> G
+    C --> G
 
     subgraph Observability
         H[Centralized Logging]
@@ -34,6 +33,44 @@ graph TD
     E --> I
     F --> H
     F --> I
+```
+
+```mermaid
+sequenceDiagram
+    participant Client
+    participant APIGateway
+    participant ComplianceService
+    participant ConfigManagementService
+    participant SchemaTransformService
+    participant RulesEngineService
+    participant Database
+
+    Client->>APIGateway: Submit compliance check request
+    APIGateway->>ComplianceService: Forward request with transaction data
+
+    ComplianceService->>ConfigManagementService: Retrieve state-specific compliance rules
+    ConfigManagementService->>Database: Query compliance rules
+    Database->>ConfigManagementService: Return compliance rules
+    ConfigManagementService->>ComplianceService: Return compliance rules
+
+    ComplianceService->>ConfigManagementService: Retrieve state-specific schema
+    ConfigManagementService->>Database: Query state-specific schema
+    Database->>ConfigManagementService: Return schema
+    ConfigManagementService->>ComplianceService: Return schema
+
+    ComplianceService->>SchemaTransformService: Transform transaction data based on state schema
+    SchemaTransformService->>ComplianceService: Return transformed data
+
+    ComplianceService->>RulesEngineService: Evaluate compliance rules on transformed data
+    RulesEngineService->>ComplianceService: Return compliance check result
+
+    ComplianceService->>Database: Log compliance check result
+
+    alt Compliance Passed
+        ComplianceService->>Client: Return success response
+    else Compliance Failed
+        ComplianceService->>Client: Return failure response
+    end
 ```
 
 #### 1. Architecture Overview
